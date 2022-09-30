@@ -1,0 +1,162 @@
+\documentclass[10pt,journal,compsoc]{IEEEtran}
+
+\usepackage{ctex}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{color}
+\usepackage{comment}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{tabu}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{wrapfig}
+\usepackage{breakcites}
+\usepackage{subfig}
+\usepackage{ragged2e}
+\usepackage{stfloats}
+\usepackage{xcolor}
+\usepackage[export]{adjustbox}
+\usepackage{indentfirst}
+\setlength{\parindent}{2em} 
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+% 定义代码样式
+\usepackage{listings}
+
+\definecolor{gray}{rgb}{0.96,0.96,0.96}
+
+\lstset{ %
+  language=python,                % the language of the code
+  basicstyle=\footnotesize,           % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  columns=fixed, 
+  numberstyle=\tiny\color{black},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=1.5mm,                  % how far the line-numbers are from the code
+  xleftmargin=1.3em,
+  backgroundcolor=\color{gray},      % choose the background color. You must add \RequirePackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,,                 % adds a frame around the code
+  frameround = tttt,
+  framexleftmargin=3mm, 
+  rulecolor=\color[RGB]{158,193,243},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+%  aboveskip=1em,
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  extendedchars=false,   
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                   % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color[RGB]{0,51,179},          % keyword style
+  commentstyle=\color[RGB]{140,140,140},       % comment style
+  stringstyle=\color[RGB]{6,125,23},         % string literal style
+  identifierstyle=\color{black},
+  escapeinside={\%*}{*)},            % if you want to add LaTeX within your code
+  morekeywords={*,...}               % if you want to add more keywords to the set
+}
+
+\def\Plus{\texttt{+}}
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+
+\graphicspath{{figures/}}
+
+% *** CITATION PACKAGES ***
+%
+\ifCLASSOPTIONcompsoc
+  % IEEE Computer Society needs nocompress option
+  % requires cite.sty v4.0 or later (November 2003)
+  \usepackage[nocompress]{cite}
+\else
+  % normal IEEE
+  \usepackage{cite}
+\fi
+
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+
+\else
+
+\fi
+
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+\begin{sloppypar}
+
+\title{计算机视觉作业­1:基于直方图的自适应阈值分割}
+
+\author{唐麒\qquad 2110299\\qitang@bjtu.edu.cn}
+
+\include{content/abstract}
+
+
+% make the title area
+%\maketitle
+
+\twocolumn[{%
+\renewcommand\twocolumn[1][]{#1}%
+\maketitle
+\pagenumbering{arabic}
+
+\vspace{-1.5cm}
+\noindent\begin{minipage}{\linewidth} 
+ 	\begin{center}
+ 	\captionsetup{font=small}
+ 	\begin{tabular}{@{}c@{}c@{}c@{}}
+% 	\includegraphics[width=0.31\linewidth,cframe=red!50!black 1mm]{fig1_a} &
+% 	\includegraphics[width=0.31\linewidth,cframe=green!50!black 1mm]{fig1_b} &
+%    \includegraphics[width=0.313\linewidth,cframe=blue!50!black 1mm]{fig1_c} \vspace{-1mm}\\
+	\includegraphics[width=0.31\linewidth]{fig1_a} &
+ 	\includegraphics[width=0.31\linewidth]{fig1_b} &
+    \includegraphics[width=0.32\linewidth]{fig1_c} \vspace{-1mm}\\
+    {\small (a)} &  {\small (b)}  &  {\small (c)} \\
+    \end{tabular}
+	\vspace{-3mm}
+	\captionof{figure}{\small 原始图像及三个不同阈值下的分割结果: (a) Test\_Img\_1, (b) Test\_Img\_2, and (c) Test\_Img\_3. 三个阈值分别为125（右上）、99（左下）和156（右下）}
+	\label{fig:random_thresholding}
+	\end{center}  \vspace{1.25cm}
+\end{minipage}
+}]
+
+\input{content/intro}
+\input{content/proposed}
+\input{content/experiment}
+\input{content/conclusion}
+
+% Can use something like this to put references on a page
+% by themselves when using endfloat and the captionsoff option.
+\ifCLASSOPTIONcaptionsoff
+  \newpage
+\fi
+
+
+
+%{\small
+%\bibliographystyle{IEEEtran}
+%\bibliography{reference/egbib}
+%}
+
+% that's all folks
+\end{sloppypar}
+\end{document}
+
+

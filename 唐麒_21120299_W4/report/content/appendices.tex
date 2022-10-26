@@ -1,0 +1,94 @@
+\appendices
+
+\section{灰度共生矩阵统计量计算公式}
+
+\begin{enumerate}
+	\item 能量
+\begin{equation}
+f_1=\sum_{i=1}^{N_g} \sum_{j=1}^{N_g} p(i, j)^2
+\end{equation}
+
+	\item 对比度
+\begin{equation}
+f_2=\sum_{k=0}^{N_g-1} k^2 p_{x-y}(k)
+\end{equation}
+
+	\item 相关性
+\begin{equation}
+f_3=\frac{\sum_{i=1}^{N_g} \sum_{j=1}^{N_g}(i j) p(i, j)-\mu_x \mu_y}{\sigma_x \sigma_y}
+\end{equation}
+
+	\item 方差
+\begin{equation}
+f_4=\sum_{i=1}^{N_g} \sum_{j=1}^{N_g}(i-\mu)^2 p(i, j)
+\end{equation}
+
+	\item 均匀性
+\begin{equation}
+f_5=\sum_{i=1}^{N_g} \sum_{j=1}^{N_g} \frac{1}{1+(i-j)^2} p(i, j)
+\end{equation}
+
+
+	\item 和平均
+\begin{equation}
+f_6=\sum_{i=2}^{2 N_g} i p_{x+y}(i)
+\end{equation}
+
+	\item 和方差
+\begin{equation}
+f_7=\sum_{i=2}^{2 N_g}\left(i-f_8\right)^2 p_{x+y}(i)
+\end{equation}
+
+	\item 和熵
+\begin{equation}
+f_8=-\sum_{i=2}^{2 N_g} p_{x+y}(i) \log \left(p_{x+y}(i)\right)
+\end{equation}
+
+	\item 熵
+\begin{equation}
+f_9=-\sum_{i=1}^{N_g} \sum_{j=1}^{N_g} p(i, j) \log (p(i, j))
+\end{equation}
+
+	\item 差方差
+	\begin{equation}
+f_{10}=\text { variance of } p_{x-y}
+\end{equation}
+
+	\item 差熵
+\begin{equation}
+f_{11}=-\sum_{i=0}^{N_g-1} p_{x-y}(i) \log \left(p_{x-y}(i)\right)
+\end{equation}
+	\item 相关信息测度1
+\begin{equation}
+f_{12}=\frac{f_9-H X Y 1}{\max (H X, H Y)}
+\end{equation}
+
+	\item 相关信息测度2
+\begin{equation}
+f_{13}=\sqrt{1-\exp ^{-2\left(H X Y 2-f_9\right)}}
+\end{equation}
+
+\begin{equation}
+H X Y 1=-\sum_{i=1}^{N_g} \sum_{j=1}^{N_g} p(i, j) \log \left(p_x(i) p_y(j)\right)
+\end{equation}
+
+\begin{equation}
+H X Y 2=-\sum_{i=1}^{N_g} \sum_{j=1}^{N_g} p_x(i) p_y(j) \log \left(p_x(i) p_y(j)\right)
+\end{equation}
+
+	\item 最大相关系数
+	
+	$\mathbf{Q}$的第二大特征值的平方根
+	
+	\begin{equation}
+		\mathbf{Q}(i, j)=\sum_k \frac{p(i, k) p(j, k)}{p_x(i) p_y(k)}
+	\end{equation}
+	
+\end{enumerate}
+
+
+\section{灰度共生矩阵统计量代码实现}
+
+\vspace{0.3cm}
+\lstinputlisting[language=Python,firstline=4,lastline=82]{glcm_features_full.py}
+

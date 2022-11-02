@@ -1,0 +1,79 @@
+\section{方法} 
+\label{sec:proposed}
+
+用高斯混合分布对背景建模的基本思想是把每一个像素点所呈现的像素值用多个高斯分布的叠加来表示。高斯混合分布之所以能够将前景和背景分开是基于如下事实，在长期观测的场景中，背景占大多数时间，更多的数据是支持背景分布的。
+
+视频序列图像的每个像素都由多个单高斯模型描述: 
+\vspace{0.5cm}
+
+\begin{equation}
+\begin{gathered}
+Pr(x_t) = \sum_{i=1}^Kw_{i,t}\cdot N\left(X_t;\mu_{i,t},\sum\nolimits_{i,t}\right)\\
+\sum\nolimits_{i,t}=\sigma_k^2I
+\end{gathered}
+\end{equation}
+
+\vspace{0.5cm}
+
+$K$ 表示高斯混合模型中单模型的数量，一般在 3 到 5 之间；$N\left(X_t;\mu_{i,t},\sum\nolimits_{i,t}\right)$ 即为单高斯模型，$w_{i,t}$ 表示每个模型的权重。
+
+代码实现如下：
+
+\vspace{0.3cm}
+\lstinputlisting[language=Python,firstline=15,lastline=33]{main.py}
+
+首先初始化预先定义的 $K$ 个高斯模型，对高斯模型中的参数进行初始化，并求出之后要用到的参数。利用高斯混合模型进行运动目标检测，并对模型的参数进行更新，步骤如下：
+
+\begin{enumerate}
+	\item 第一步:如果新读入的图像序列中的图片在 $(x,y)$ 处的像素值对于 $i=1,2, \ldots, K$ 满足 $|I(x, y, t)-\mu_i(x,y,t)| \leq \lambda \sigma_i(x, y, t)$，$\lambda$ 一般取 2.5, 则新像素点与该单模型匹配。如果存在与新像素点匹配的单模型，则判断为背景，并进入第二步;如果不存在则判断为前景，并进入第三步。
+	\item 第二步: 修正与新像素匹配的单模型的权值，新的权值表示如下:
+	\vspace{0.5cm}
+
+	\begin{equation}
+	w_{i,t} = (1-\alpha)w_{i,t}+\alpha
+	\end{equation}
+	
+		\vspace{0.3cm}
+
+并更新所匹配到的单模型均值和方差，更新方法如下：
+\vspace{0.5cm}
+
+\begin{equation}
+\begin{gathered}
+\mu_k=(1-\rho) \mu_{k-1}+\rho X_t \\
+\sigma_k^2=(1-\rho) \sigma_{k-1}^2+\rho\left(X_t-\mu_k\right)^T\left(X_t-\mu_k\right) \\
+\rho=\alpha N\left(X_t ; \mu_k, \sigma_k\right)
+\end{gathered}
+\end{equation}
+\vspace{0.3cm}
+	
+	\item 若该像素不与任何一个单模型匹配，则:1) 如果当前单模型的数目已经达到允许的最大数目，则去除当前单模型集合中重要性最小的单模型；2) 增加一个新的单模型，新的单模型的权重为一个较小的值，均值为新像素的值，方差为给定的较大的值，并对权重进行归一化。
+	\vspace{0.5cm}
+	\begin{equation}
+w_{i,t}=\frac{w_{i,t}}{\sum_{j=1}^K w_{i,t}},(i=1,2, \cdots, K)
+\end{equation}
+	\vspace{0.3cm}
+	
+	由高斯混合模型进行背景建模的基本思想可知，背景模型具有以下特点:(1) 权重大（先验大）: 背景出现的频率高;(2) 方差小: 像素值变化不大。因此，可以根据
+	\vspace{0.5cm}
+	\begin{equation}
+\frac{w}{\sigma}=\frac{w_{i,t}}{\sum\nolimits_{i,t}}
+\end{equation}
+		\vspace{0.2cm}
+
+作为重要性排序的依据。排序及删减过程如下: (1) 计算每个单模型的重要性值 $\frac{w}{\sigma}$。(2) 对于各个单模型按照重要性的大小进行排序，重要性大的排在前面。(3) 若前 $N$ 个单模型的权重满足 $\sum_{i=1}^N w_{i,t}>T$，则仅用这 $N$ 个单模型作为背景模型，并删除其他的单模型。
+\end{enumerate}
+
+
+代码实现如下：
+
+\vspace{0.3cm}
+\lstinputlisting[language=Python,firstline=68,lastline=159]{main.py}
+
+利用训练得到的高斯混合模型对当前帧进行运动目标检测的代码实现如下：
+
+
+\vspace{0.3cm}
+\lstinputlisting[language=Python,firstline=171,lastline=199]{main.py}
+
+在获得运动目标的二值图像后，利用数学形态学的膨胀和腐蚀操作来分别消除目标中的空洞和噪声。
